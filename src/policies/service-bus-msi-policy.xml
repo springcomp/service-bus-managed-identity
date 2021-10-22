@@ -1,0 +1,25 @@
+<policies>
+	<inbound>
+		<base />
+		<!-- authenticate against backend service using managed identity -->
+		<authentication-managed-identity resource="@( context.Api.ServiceUrl.ToString() )" output-token-variable-name="access-token" ignore-error="false" />
+		<set-header name="Authorization" exists-action="override">
+			<value>@( "Bearer " + (string) context.Variables["access-token"] )</value>
+		</set-header>
+		<!-- rewrite uri to "/{topic-name}/messages" -->
+		<rewrite-uri template="@{
+            var operationPath = context.Operation.UrlTemplate.TrimStart('/').Replace("{*", "{");
+            var result = operationPath.Substring(operationPath.IndexOf('/'));
+            return (result + "/messages");
+        }" />
+	</inbound>
+	<backend>
+		<base />
+	</backend>
+	<outbound>
+		<base />
+	</outbound>
+	<on-error>
+		<base />
+	</on-error>
+</policies>

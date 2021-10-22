@@ -1,0 +1,53 @@
+<policies>
+	<inbound>
+		<base />
+		<!-- create authorization header using shared access signature -->
+		<set-variable name="Authorization" value="@{
+string resourceUri = context.Api.ServiceUrl.ToString(); 
+string sasKeyName = (string)context.Variables.GetValueOrDefault("SasKeyName", "SendOnly"); 
+string sasKey = (string)context.Variables.GetValueOrDefault("SasKey", "vOSu***REDACTED***"); 
+
+// set the token lifespan (1 minute)
+var epoch = new System.DateTime(1970, 1, 1);
+var sinceEpoch = System.DateTime.UtcNow.Subtract(epoch);
+var expiry = System.Convert.ToString((int)sinceEpoch.TotalSeconds + 60);
+
+var stringToSign = System.Uri.EscapeDataString(resourceUri) + "\n" + expiry;
+var hmac = new System.Security.Cryptography.HMACSHA256(
+    System.Text.Encoding.UTF8.GetBytes(sasKey)
+);
+var signature = System.Convert.ToBase64String(
+    hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(stringToSign))
+);
+
+//format the sas token 
+var sasToken = String.Format(
+    "SharedAccessSignature sr={0}&amp;sig={1}&amp;se={2}&amp;skn={3}",
+    System.Uri.EscapeDataString(resourceUri),
+    System.Uri.EscapeDataString(signature),
+    expiry,
+    sasKeyName
+);
+
+return sasToken;
+        }" />
+		<set-header name="Authorization" exists-action="override">
+			<value>@((string)context.Variables.GetValueOrDefault("Authorization"))</value>
+		</set-header>
+		<!-- rewrite uri to "/{topic-name}/messages" -->
+		<rewrite-uri template="@{
+            var operationPath = context.Operation.UrlTemplate.TrimStart('/').Replace("{*", "{");
+            var result = operationPath.Substring(operationPath.IndexOf('/'));
+            return (result + "/messages");
+        }" />
+	</inbound>
+	<backend>
+		<base />
+	</backend>
+	<outbound>
+		<base />
+	</outbound>
+	<on-error>
+		<base />
+	</on-error>
+</policies>

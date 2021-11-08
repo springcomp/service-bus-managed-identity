@@ -1,4 +1,5 @@
-﻿using Azure.Identity;
+﻿using Azure.Core;
+using Azure.Identity;
 using Azure.Messaging.ServiceBus;
 using Microsoft.Extensions.Configuration;
 using Spectre.Console;
@@ -28,11 +29,17 @@ var serviceBusNamespace = configuration.GetValue<string>("service-bus-namespaces
 AnsiConsole.MarkupLine($"[gray]{clientId}[/]");
 AnsiConsole.MarkupLine($"[gray]{clientSecret.Substring(0, 4)}***REDACTED***[/]");
 
-var credentials = new ClientSecretCredential(
+var credentials = (TokenCredential) new ClientSecretCredential(
 	tenantId,
 	clientId,
 	clientSecret
 	);
+
+var context = new TokenRequestContext(new []{ "https://servicebus.azure.net/.default",});
+var token = await credentials.GetTokenAsync(context, CancellationToken.None);
+
+Console.WriteLine(token);
+credentials = new SecretStoreCredential(token);
 
 var client = new ServiceBusClient(serviceBusNamespace, credentials);
 var sender = client.CreateSender(topicName);
@@ -61,4 +68,23 @@ catch (Exception e)
 {
 	AnsiConsole.MarkupLine("");
 	AnsiConsole.WriteException(e);
+}
+
+public sealed class SecretStoreCredential : TokenCredential
+{
+	private readonly AccessToken token_;
+	public SecretStoreCredential(AccessToken token)
+	{
+		token_ = token;
+	}
+
+	public override AccessToken GetToken(TokenRequestContext requestContext, CancellationToken cancellationToken)
+	{
+		return token_;
+	}
+
+	public override ValueTask<AccessToken> GetTokenAsync(TokenRequestContext requestContext, CancellationToken cancellationToken)
+	{
+		return new ValueTask<AccessToken>(Task.FromResult(token_));
+	}
 }

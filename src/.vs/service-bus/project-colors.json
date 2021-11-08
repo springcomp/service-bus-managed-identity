@@ -1,0 +1,26 @@
+{
+  "Version": 1,
+  "ProjectMap": {
+    "acb29a68-c541-4ad7-b034-87fb5088ff9f": {
+      "ProjectGuid": "acb29a68-c541-4ad7-b034-87fb5088ff9f",
+      "DisplayName": "console",
+      "ColorIndex": 0
+    },
+    "93177434-657d-4bdb-bc12-698fcf1838c4": {
+      "ProjectGuid": "93177434-657d-4bdb-bc12-698fcf1838c4",
+      "DisplayName": "credentials-win64",
+      "ColorIndex": 1
+    },
+    "d060aaf0-6f1c-4750-88e2-c42815d58910": {
+      "ProjectGuid": "d060aaf0-6f1c-4750-88e2-c42815d58910",
+      "DisplayName": "credentials-interop",
+      "ColorIndex": 2
+    },
+    "97600a45-eb92-4c87-af37-3961be8d9959": {
+      "ProjectGuid": "97600a45-eb92-4c87-af37-3961be8d9959",
+      "DisplayName": "CredentialManagement",
+      "ColorIndex": 3
+    }
+  },
+  "NextColorIndex": 4
+}

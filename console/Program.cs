@@ -14,10 +14,6 @@ namespace AppWithPlugin
 				config.AddCommand<LoginCommand>("login");
 			});
 			return app.Run(args);
-
-			//var credentialStore = Utilities.GetCredentialStore();
-			//credentialStore.SetCredentials("https://target.com", "maxime", "password");
-			//Environment.Exit(43);
 		}
 	}
 }

@@ -2,7 +2,10 @@
   "profiles": {
     "AppWithPlugin": {
       "commandName": "Project",
-      "commandLineArgs": "hello"
+      "commandLineArgs": "login --application-client-id c7d300af-4357-4194-a5a4-a1c0c8ffb49d --tenant-id e6cbec2f-2f23-43ca-82c4-51a7c9b71e7a",
+      "environmentVariables": {
+        "AZSERVICEBUS_SPA_CLIENT_SECRET": "5_xAjMXD65zZM~.97Iwh5a_K6ZWJW-0xCv"
+      }
     }
   }
 }

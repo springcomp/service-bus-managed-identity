@@ -6,7 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\PluginBase\PluginBase.csproj" />
+    <ProjectReference Include="..\credentials-interop\credentials-interop.csproj" />
   </ItemGroup>
 
 </Project>

@@ -22,7 +22,7 @@ namespace AppWithPlugin
 
                 string[] pluginPaths = new string[]
                 {
-                    @"Plugin\bin\Debug\netcoreapp3.1\Plugin.dll"
+                    @"credentials-win64\bin\Debug\netstandard2.1\credentials-win64.dll"
                 };
 
                 IEnumerable<Credentials.Interop.ICredentialStore> commands = pluginPaths.SelectMany(pluginPath =>

@@ -1,20 +1,23 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Reflection;
 using console;
-using Credentials.Interop;
+using console.Commands;
+using Spectre.Console.Cli;
 
 namespace AppWithPlugin
 {
-    class Program
-    {
-        static void Main(string[] args)
-        {
-            var credentialStore = Utilities.GetCredentialStore();
-            credentialStore.SetCredentials("https://target.com", "maxime", "password");
-            Environment.Exit(43);
-        }
-    }
+	class Program
+	{
+		static int Main(string[] args)
+		{
+			var app = new CommandApp<LoginCommand>();
+			app.Configure(config => {
+				config.AddCommand<LoginCommand>("login");
+			});
+			return app.Run(args);
+
+			//var credentialStore = Utilities.GetCredentialStore();
+			//credentialStore.SetCredentials("https://target.com", "maxime", "password");
+			//Environment.Exit(43);
+		}
+	}
 }

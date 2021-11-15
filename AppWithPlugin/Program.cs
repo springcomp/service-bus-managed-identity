@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-
+using console;
 using Credentials.Interop;
 
 namespace AppWithPlugin
@@ -75,7 +75,10 @@ namespace AppWithPlugin
 
             string pluginLocation = Path.GetFullPath(Path.Combine(root, relativePath.Replace('\\', Path.DirectorySeparatorChar)));
             Console.WriteLine($"Loading commands from: {pluginLocation}");
-            PluginLoadContext loadContext = new PluginLoadContext(pluginLocation);
+
+            return AssemblyLoader.LoadAssembly(pluginLocation);
+            
+            var loadContext = new AssemblyLoader(pluginLocation);
             return loadContext.LoadFromAssemblyName(new AssemblyName(Path.GetFileNameWithoutExtension(pluginLocation)));
         }
 
